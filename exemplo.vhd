@@ -4,9 +4,9 @@ use ieee.numeric_std.all;
 
 entity baseComb is
     generic(n: natural;
-           f1: positive;
-           f2: positive;
-           f3: positive);
+           f1: boolean;
+           f2: boolean;
+           f3: boolean);
     port(
         input0: in std_logic_vector(n-1 downto 0);
         output0: out std_logic_vector(n-1 downto 0)
