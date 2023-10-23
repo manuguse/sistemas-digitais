@@ -46,12 +46,14 @@ architecture structure of fibonacci is
     signal ctrl1, ctrl2, ctrl3, ctrl4, ctrl5, ctrl6, ctrl7, ctrl8, ctrl9: std_logic;
     signal stt1, stt2: std_logic;
 begin
-    BC: fibonacciControlBlock port map(component fibonacciControlBlock is
-        port(
-            clock, clear: in std_logic;
-            ctrl1, ctrl2, ctrl3, ctrl4, ctrl5, ctrl6, ctrl7, ctrl8, ctrl9: out std_logic;
-            stt1, stt2: in std_logic;
-			iniciar: in std_logic;
-			pronto: out std_logic);
-    BO: fibonacciOperatingBlock generic map(width) port map(--COMPLETE);
+    BC: fibonacciControlBlock port map(clock, clear,
+                                       ctrl1, ctrl2, ctrl3, ctrl4, ctrl5, ctrl6, ctrl7, ctrl8, ctrl9,
+                                       stt1, stt2,
+			                           iniciar,
+			                           pronto);
+    BO: fibonacciOperatingBlock generic map(width) port map(clock, clear,
+                                                            ctrl1, ctrl2, ctrl3, ctrl4, ctrl5, ctrl6, ctrl7, ctrl8, ctrl9: in std_logic;
+                                                            stt1, stt2,
+                                                            n,
+                                                            nterm);
 end architecture;
