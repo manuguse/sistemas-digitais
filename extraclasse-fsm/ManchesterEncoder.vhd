@@ -17,14 +17,12 @@ end entity;
 architecture studenttry of ManchesterEncoder is
 	type State is (idle, s1a, s1b, s0a, s0b);
 	signal currentState, nextState: State;
-    signal outp: std_logic := '0';
 begin
 	-- next-state logic (DO NOT CHANGE OR REMOVE THIS LINE)
 	process(currentState, v, d)
     begin
         case currentState is
             when idle =>
-                outp <= '0';
                 if v = '0' then
                     nextState <= idle;
                 else
@@ -37,10 +35,8 @@ begin
             
             when s1a =>
                 nextState <= s1b;
-                outp <= '1';
 
             when s1b =>
-                outp <= '0';
                 if v = '0' then 
                     nextState <= idle;
                 else
@@ -52,11 +48,9 @@ begin
                 end if;
 
             when s0a =>
-                outp <= '0';
                 nextState <= s0b;
 
             when s0b =>
-                outp <= '1';
                 if v = '0' then
                     nextState <= idle;
                 else
@@ -70,6 +64,7 @@ begin
             end case;
     end process;
             
+    
 	-- end-next-state logic (DO NOT CHANGE OR REMOVE THIS LINE)
 	
 	
@@ -86,8 +81,8 @@ begin
 	
 	
 	-- output-logic (DO NOT CHANGE OR REMOVE THIS LINE)
-    y <= outp;
+    y <= '1' when currentState = s0b or currentState = s1a
+        else '0';
     -- end-output-logic (DO NOT CHANGE OR REMOVE THIS LINE)
 end architecture;
-
 
