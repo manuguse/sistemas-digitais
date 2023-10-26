@@ -23,7 +23,6 @@ begin
     begin
         case currentState is
             when state1 => 
-                outt <= "00";
                 if inp = '1' then
                     nextState <= state2;
                 else
@@ -31,7 +30,6 @@ begin
                 end if;
 
             when state2 =>
-                outt <= "01";
                 if inp = '1' then 
                     nextState <= state4;
                 else
@@ -39,7 +37,6 @@ begin
                 end if;
             
             when state3 =>
-                outt <= "10";
                 if inp = '1' then
                     nextState <= state4;
                 else
@@ -47,7 +44,6 @@ begin
                 end if;
 
             when state4 =>
-                outt <= "11";
                 if inp = '1' then
                     nextState <= state1;
                 else
@@ -72,6 +68,9 @@ begin
 	
 	
 	-- output-logic (DO NOT CHANGE OR REMOVE THIS LINE)
-    outp <= outt;
+    outp <= "00" when currentState = state1 else
+            "01" when currentState = state2 else
+            "10" when currentState = state3 else
+            "11";
     -- end-output-logic (DO NOT CHANGE OR REMOVE THIS LINE)
 end architecture;
