@@ -57,6 +57,7 @@ begin
 	end process;
 
 	-- output
+	pronto <= '1' when currentState = L01 else '0';
 	ctrl1 <= '1' when currentState = L02 else '0';
 	ctrl2 <= '1' when currentState = L05 else '0';
 	ctrl3 <= '1' when currentState = L04 else '0';
