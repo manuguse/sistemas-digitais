@@ -23,16 +23,28 @@ architecture estrutura of topComRAM is
 	end component;
 
 	component ram
-	PORT
-	(
-		address		: IN STD_LOGIC_VECTOR (7 DOWNTO 0);
-		clock		: IN STD_LOGIC  := '1';
-		data		: IN STD_LOGIC_VECTOR (7 DOWNTO 0);
-		wren		: IN STD_LOGIC ;
-		q		: OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
-	);
-end component;
+	port(
+		address: in std_logic_vector (7 DOWNTO 0);
+		clock: in std_logic  := '1';
+		data: in std_logic_vector (7 DOWNTO 0);
+		wren: in std_logic ;
+		q: out std_logic_vector (7 DOWNTO 0));
+	end component;
 
+signal address: std_logic_vector(7 downto 0);
+signal data: std_logic_vector(7 downto 0);
+signal wren: std_logic_vector(7 downto 0);
+signal q: std_logic_vector(7 downto 0);
 
 begin
+
+	SD: acessoRAM 
+	port map(
+		clock, clear, iniciar, pronto, dado, address, wren, q);
+		
+	RAM0: ram 
+	port map(
+		address, clock, data, wren, q);
+
+
 end architecture;
