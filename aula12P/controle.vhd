@@ -21,7 +21,29 @@ begin
 	-- next state
 	process(iniciar, currentState, stt1) is
 	begin
-		nextState <= ;
+		nextState <= L01;
+		case currentState is
+		
+			when L01 =>
+				if iniciar = '1' then 
+					nextState <= L02;					
+			end if;
+			
+			when L02 =>
+				nextState <= L03;
+			 
+			when L03 =>
+				if stt1 = '1' then
+					nextState <= L04;
+				end if;
+				
+			when L04 =>
+				nextState <= L05;
+				
+			when L05 =>
+				nextState <= L03;
+			
+		end case;
 	end process;
 
 	-- register
