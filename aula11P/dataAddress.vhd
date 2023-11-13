@@ -31,7 +31,7 @@ architecture youdecide of dataAddress is
 begin
 
 signal tempAddress: std_logic_vector(address'len - 1 downto 0) := (others => '0');
-signal iXn: std_logic_vector() -- completar
+signal iXn: std_logic_vector() := (others => '0') -- completar
 
 component multiplier is
     generic(width: positive);
@@ -40,28 +40,27 @@ component multiplier is
 end component;
 
 end architecture;
-
--- tentando criar uma logica sem precisamente ser em vhdl
-
---iMultN: multiplier 
---generic map() -- descobrir
---port map(
---    input0 => i,
---    input1 => n,
---    output => iXn
---);
-
-varAdd:
-if not isVector and not isMatrix generate
-    tempAdress <= baseAdress + dataByte - 1;
-end generate;
     
 vectorAdd:
 if isVector generate
-    tempAdress = baseAdress + dataByte - 1 + rowElement*(dataWidth/8);
+    --iMultN: multiplier 
+        --generic map() -- descobrir
+        --port map(
+        --    input0 => dataWidth/8,
+        --    input1 => rowElement,
+        --    output => iXn
+        --);
 end generate;
         
 matrixAdd:
 if isMatrix generate
-    tempAddress = baseAdress + dataByte - 1 + (dataWidth/8 * (rowElement*n + columnElement));
+    --iMultN: multiplier 
+    --generic map() -- descobrir
+    --port map(
+    --    input0 => dataWidth/8,
+    --    input1 => rowElement*n + columnElement,
+    --    output => iXn
+    --);
+
+adress = baseAddress +  dataByte - 1 + iXn
 end generate;
