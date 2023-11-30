@@ -10,5 +10,5 @@ end entity;
 
 architecture behav0 of multiplexer2x1 is
 begin
-    output <= input0 when sel = '0' else input1;
+    -- COMPLETE COM COMANDOS CONCORRENTES
 end architecture;
