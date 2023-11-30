@@ -18,8 +18,7 @@ end entity;
 
 architecture behav0 of rippleCounter is
     subtype state is unsigned(width-1 downto 0);
-    signal nextState, currentState, nextState2, nextState3: state;
-    signal processState: state;
+    signal nextState, nextState2, nextState3, currentState, processState: state;
     signal K: state;
 begin
 
