@@ -1,5 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity blocoOperativo4T is
 	generic(width_ent: positive;
@@ -37,7 +38,7 @@ architecture descricaoEstrutural of blocoOperativo4T is
 				result: out std_logic_vector(N-1 downto 0);
 				ovf, cout: out std_logic );
 	end component;
-	component componentegisterN is
+	component registerN is
 		generic(	width: natural;
 					resetValue: integer := 0 );
 		port(	-- control
@@ -55,45 +56,56 @@ architecture descricaoEstrutural of blocoOperativo4T is
 				lessThan, equal: out std_logic );
 	end component;
 	-- COMPLETE COM EVENTUAIS SINAIS INTERNOS
-
-	signal entry_b_sub: std_logic_vector(width_n-1 downto 0);
-	signal sub_out, mux0_out, cont_out: std_logic_vector(width_n-1 downto 0);
-	signal sum_out, smux_out, regT_out, regAC_out: std_logic_vector(width_ent-1 downto 0);
-
+	signal sub_out, muxcont_out, cont_out: std_logic_vector(width_n-1 downto 0);
+	signal sum_out, muxAC_out, AC_reg, T_reg: std_logic_vector(width_ent-1 downto 0);
 begin
 	-- COMPLETE COM EVENTUAIS COMANDOS CONCORRENTES
-	entry_b_sub(0) <= '1';
-	entry_b_sub <= (others => '0');
-
-	entry_input1(0) <= '1';
-	entry_input1 <= (others => '0');
     -- COMPLETE OS COMANDOS DE INSTANCIACAO ABAIXO
+    
 	mux0: multiplexer2x1 
 			generic map(width=>width_n)
-			port map(input0=>sub_out, input1=>n, sel=>scont, output=>mux0_out);
-	cont: componentegisterN 
+			port map(input0=>sub_out, input1=>n, sel=>scont, 
+			output=>muxcont_out);
+			
+	cont: component registerN 
 			generic map(width=>width_n)
-			port map(clock=>clock, reset=>'0', load=>ccont,
-				input=>mux0_out,	output=>cont_out);
+			port map(clock=>clock, reset=>reset, load=>ccont,
+				input=>muxcont_out,	output=>cont_out);
+				
 	subtractor0: addersubtractor 
-			generic map(N=>width_n, isAdder=>false, isSubtractor=>true, generateOvf=>false)
-			port map(op=>'0', a=>cont_out, b=>entry_b_sub, result=>sub_out, ovf=>open, cout=>open);
+			generic map(N=>width_n, isAdder=>false,
+			            isSubtractor=>true, generateOvf=>false)
+			port map(op=>'0', a=>cont_out, b=>std_logic_vector(to_unsigned(1, width_n)),
+			result=>sub_out, ovf=>open, cout=>open);
+			
 	compare0: compare
-			generic map (width=>width_n, isSigned=>false, generateLessThan=>false, generateEqual=>true)
-			port map (input0=>cont_out, input1=>'0', lessThan=>open, equal=>zero);
+			generic map (width=>width_n, isSigned=>false, 
+			generateLessThan=>false,generateEqual=>true)
+			port map (input0=>cont_out, 
+			input1=>std_logic_vector(to_unsigned(0, width_n)), 
+			lessThan=>open, equal=>zero);
 			
 	mux1: multiplexer2x1 
 			generic map(width=>width_ent)
-			port map(input0=>sum_out, input1=>'0', sel=>zAC, output=>smux_out);
-	AC: componentegisterN 
+			port map(input0=>sum_out, 
+			input1=>std_logic_vector(to_unsigned(0, width_ent)),
+			sel=>zAC, output=>muxAC_out);
+			
+	AC: component registerN 
 			generic map(width=>width_ent)
 			port map(clock=>clock, reset=>reset, load=>cAC,
-				input=>smux_out,	output=>regAC_out);
-	T: componentegisterN 
+		             input=>muxAC_out,output=>AC_reg);
+		             
+	T: component registerN 
 			generic map(width=>width_ent)
 			port map(clock=>clock, reset=>reset, load=>cT,
-				input=>ent,	output=>regT_out);
-	adder0: addersubtractor 
-			generic map(N=>width_ent, isAdder=>true, isSubtractor=>false, generateOvf=>false)
-			port map(op=>'0', a=>regAC_out, b=>regT_out, result=>sum_out, ovf=>ov, cout=>open);
+			         input=>ent, output=>T_reg);
+			         
+    adder0: addersubtractor 
+			generic map(N=>width_ent, isAdder=>true, isSubtractor=>false, 
+			generateOvf=>true)
+			port map(op=>'0', a=>AC_reg, b=>T_reg, result=>sum_out,
+			ovf=>open, cout=>ov);
+			
+	soma <= AC_reg;
 end architecture;

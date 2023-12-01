@@ -14,14 +14,14 @@ end entity;
 architecture behav0 of compare is
 begin
 	if0: if generateEqual generate
-		-- COMPLETE
+		equal <= '1' when input0 = input1 else '0';
 	end generate;
 	if1: if generateLessThan generate
 		if2: if isSigned generate
-	    	-- COMPLETE
+	        lessThan <= '1' when to_integer(signed(input0)) < to_integer(signed(input1)) else '0';
 		end generate;
 		if3: if not isSigned generate
-    		-- COMPLETE
+    		lessThan <= '1' when to_integer(unsigned(input0)) < to_integer(unsigned(input1)) else '0';
 		end generate;
 	end generate;
 end architecture;

@@ -66,7 +66,7 @@ begin
 				zero=>zero, ov=>ov,
 				ent=>ent,n=>n, 
 				soma=>soma);
-	BC: blocoControle4T port map(clock=>ck, reset=>reset, iniciar=>,
+	BC: blocoControle4T port map(clock=>ck, reset=>reset, iniciar=>iniciar,
 				zero=>zero, ov=>ov,
 				erro=>erro, pronto=>pronto,
 				scont=>scont, ccont=>ccont, zAC=>zAC, cAC=>cAC, cT=>cT,

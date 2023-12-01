@@ -13,14 +13,29 @@ entity registerN is
 end entity;
 
 architecture behav0 of registerN is
--- COMPLETE COM SINAIS INTERNOS ESPERADOS DE UM CIRCUITO SEQUENCIAL
+    signal currentState, nextState: std_logic_vector(output'range);
 begin
     -- next-state logic  (nao exclua e nem mude esta linha)
-    -- COMPLETE
+    process(currentState, load, input) is
+    begin
+        nextState <= currentState;
+        if load = '1' then
+                nextState <= input;
+        end if;
+    end process;
 
 	-- memory element --state register-- (nao exclua e nem mude esta linha)
-	-- COMPLETE
+	process(clock, reset) is
+	begin
+	    if reset = '1' then
+            currentState <= std_logic_vector(to_unsigned(resetValue, width));
+        else
+            if rising_edge(clock) then
+                currentState <= nextState;
+            end if;
+        end if;
+	end process;
 	
 	-- output logic  (nao exclua e nem mude esta linha)
-	-- COMPLETE
+	output <= currentState;
 end architecture;

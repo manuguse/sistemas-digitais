@@ -20,9 +20,9 @@ end entity;
 architecture descricaoComportamental of blocoControle4T is
     -- não acrescente nada aqui. State está definido no package work.BC_State
     signal nextState, currentState: State;
-begin
-    -- next-state logic (nao exclua e nem mude esta linha)
-    process(iniciar, currentState, stt1) is
+	begin
+	-- next-state logic (DO NOT CHANGE OR REMOVE THIS LINE)
+    process(currentState, iniciar, zero, ov) is
 		begin
 			nextState <= S0;
 			case currentState is
@@ -39,37 +39,43 @@ begin
 						nextState <= S3;
 					end if;
 				when S3 =>
-					if ov = '1' then
-						nextState <= E;
-					else
+					if ov = '0' then
 						nextState <= S2;
+					else
+						nextState <= E;
 					end if;
 				when E => 
 					if iniciar = '1' then
 						nextState <= S1;
-					else 
+					else
 						nextState <= E;
 					end if;
 			end case;
 	end process;
+	-- end-next-state logic (DO NOT CHANGE OR REMOVE THIS LINE)
 
-	-- memory element --state register--  (nao exclua e nem mude esta linha)
-	process(clock, clear) is
-		begin
-			if clear = '1' then
-				currentState <= S0;
-			elsif rising_edge(clock) then
-				currentState <= nextState;
-			end if;
+	-- memory register (DO NOT CHANGE OR REMOVE THIS LINE)
+	process(clock, reset)
+	begin
+	    if reset = '1' then
+	        currentState <= S0;
+	    else
+	        if rising_edge(clock) then
+	            currentState <= nextState;
+	        end if;
+	    end if;
 	end process;
+	-- memory register (DO NOT CHANGE OR REMOVE THIS LINE)
 	
-	-- output logic  (nao exclua e nem mude esta linha)
-	-- COMPLETE
-	erro <= '1' when currentState = E else '0';
-	pronto <= '1' when currentState = E or currentState = S0 else '0';
-	scont <= '1' when currentState = S1 else '0';
-	ccont <= '1' when currentState = S1 or currentState = S3 else '0';
-	zAC <= '1' when currentState = S1 else '0';
-	cAC <= '1' when currentState = S1 or currentState = S3 else '0';
-	cT <= '1' when currentState = S1 or currentState = S3 else '0';
+	-- output-logic (DO NOT CHANGE OR REMOVE THIS LINE)
+	stateBC <= currentState;
+	erro <= '1' when (currentState = E) else '0';
+	pronto <= '1' when (currentState = E or currentState = S0) else '0';
+	scont <= '1' when (currentState = S1) else '0';
+	ccont <= '1' when (currentState = S1 or currentState = S3) else '0';
+	zAC <= '1' when (currentState = S1) else '0';
+	cAC <= '1' when (currentState = S1 or currentState = S3) else '0';
+	cT <= '1' when (currentState = S1 or currentState = S3) else '0';
+    -- end-output-logic (DO NOT CHANGE OR REMOVE THIS LINE)
+
 end architecture;
